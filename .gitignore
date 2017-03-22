@@ -1,3 +1,7 @@
+# User Setting
+tests/data.csv
+tests/export.xlsx
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

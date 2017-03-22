@@ -1,0 +1,21 @@
+language: python
+python:
+  - "2.7"
+  - "3.3"
+  - "3.4"
+  - "3.5"
+before_install:
+  - sudo apt-get install python-numpy python-scipy python-pandas
+install:
+  - pip install sqlalchemy
+  - pip install numpy
+  - pip install pandas
+  - pip install xlrd # Read Excel
+  - pip install openpyxl # Write Excel
+  - pip install . # Install it self
+  - pip install --upgrade pytest
+script: py.test
+notifications:
+  slack:
+    on_success: never
+    on_failure: never
