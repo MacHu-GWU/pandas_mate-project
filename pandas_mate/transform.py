@@ -85,6 +85,11 @@ def to_index_row_dict(df, index_col=None, use_ordered_dict=True):
 
 def to_dict_list(df, use_ordered_dict=True):
     """Transform each row to dict, and put them into a list.
+    
+    **中文文档**
+    
+    将 ``pandas.DataFrame`` 转换成一个字典的列表。列表的长度与行数相同, 其中
+    每一个字典相当于表中的一行, 相当于一个 ``pandas.Series`` 对象。
     """
     if use_ordered_dict:
         dict = OrderedDict
@@ -106,7 +111,7 @@ def to_dict_list_generic_type(df, int_col=None):
     
     **中文文档**
     
-    由于pandas.Series中的值的整数数据类型是 ``numpy.int64``, 
+    由于 ``pandas.Series`` 中的值的整数数据类型是 ``numpy.int64``, 
     时间数据类型是 ``pandas.tslib.Timestamp``, None的数据类型是 ``np.nan``。
     虽然从访问和计算的角度来说没有什么问题, 但会和很多数据库的操作不兼容。 
     

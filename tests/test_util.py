@@ -22,6 +22,11 @@ def test_read_csv_arg_preprocess():
     assert chunksize <= 100000  # 83334
 
 
+def test_ascii_table():
+    df = create_test_df(3)
+    s = util.ascii_table(df)
+
+
 if __name__ == "__main__":
     import os
     pytest.main([os.path.basename(__file__), "--tb=native", "-s", ])

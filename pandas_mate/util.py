@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import print_function
 import os
 import math
+try:
+    from .pkg.prettytable import PrettyTable
+except:
+    from pandas_mate.pkg.prettytable import PrettyTable
 
 
 def count_lines(abspath):
@@ -17,7 +22,7 @@ def count_lines(abspath):
 
 
 def read_csv_arg_preprocess(abspath, memory_usage=100*1000*1000):
-    """
+    """Automatically decide if we need to use iterator mode to read a csv file.
 
     :param abspath: csv file absolute path.
     :param memory_usage: max memory will be used for pandas.read_csv().
@@ -39,3 +44,19 @@ def read_csv_arg_preprocess(abspath, memory_usage=100*1000*1000):
     else:
         iterator = True
     return iterator, chunksize
+
+
+def to_prettytable(df):
+    pt = PrettyTable()
+    pt.field_names = df.columns
+    for tp in zip(*(l for col, l in df.iteritems())):
+        pt.add_row(tp)
+    return pt
+
+
+def ascii_table(df):
+    return str(to_prettytable(df))
+
+
+def ascii_print(df):
+    print(ascii_table(df))
