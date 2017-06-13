@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-This module convert pandas's data type into varities of form.
+This module convert pandas's data type into varieties of form.
 """
 
 import sys

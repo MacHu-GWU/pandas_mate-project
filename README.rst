@@ -9,13 +9,17 @@
 
 Welcome to pandas_mate Documentation
 ====================================
-``pandas_mate`` provides lots of utility method for pandas. 
+``pandas_mate`` provides lots of utility method for pandas.
+
+- ``pandas_mate.csv_io``: provide advance csv I/O interface.
+- ``pandas_mate.sql_io``: provide database I/O interface.
+- ``pandas_mate.transform``: convert pandas's data type into varieties of form.
 
 
 **Quick Links**
 ---------------
 - `GitHub Homepage <https://github.com/MacHu-GWU/pandas_mate-project>`_
-- `Online Documentation <http://pythonhosted.org/pandas_mate>`_
+- `Online Documentation <https://pypi.python.org/pypi/pandas_mate>`_
 - `PyPI download <https://pypi.python.org/pypi/pandas_mate>`_
 - `Install <install_>`_
 - `Issue submit and feature request <https://github.com/MacHu-GWU/pandas_mate-project/issues>`_
