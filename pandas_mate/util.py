@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+
+"""
+
 from __future__ import print_function
 import os
 import math
@@ -47,6 +51,8 @@ def read_csv_arg_preprocess(abspath, memory_usage=100*1000*1000):
 
 
 def to_prettytable(df):
+    """Convert DataFrame into ``PrettyTable``.
+    """
     pt = PrettyTable()
     pt.field_names = df.columns
     for tp in zip(*(l for col, l in df.iteritems())):
@@ -55,8 +61,12 @@ def to_prettytable(df):
 
 
 def ascii_table(df):
+    """Convert DataFrame into ascii table string.
+    """
     return str(to_prettytable(df))
 
 
 def ascii_print(df):
+    """Print DataFrame into ascii table format.
+    """
     print(ascii_table(df))

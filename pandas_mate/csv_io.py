@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+This module provide advance csv I/O interface.
+"""
+
 from collections import OrderedDict
 import pandas as pd
 try:
@@ -15,14 +19,14 @@ def iter_tuple_from_csv(path,
                         skiprows=None,
                         nrows=None,
                         **kwargs):
-    """
-    
+    """A high performance, low memory usage csv file row iterator function.
+
     :param path: csv file path.
     :param iterator:
     :param chunksize:
     :param skiprows:
     :param nrows:
-    
+
     :yield tuple: 
 
     **中文文档**
@@ -48,6 +52,7 @@ def iter_tuple_from_csv(path,
         for tp in itertuple(df):
             yield tp
 
+
 def index_row_dict_from_csv(path,
                             index_col=None,
                             iterator=False,
@@ -65,9 +70,10 @@ def index_row_dict_from_csv(path,
     :param chunksize:
     :param skiprows:
     :param nrows:
-    
-    :yield tuple: 
-    
+    :param use_ordered_dict:
+
+    :returns: {index_1: row1, index2: row2, ...} 
+
     **中文文档**
 
     读取csv, 选择一值完全不重复, 可作为index的列作为index, 生成一个字典
@@ -105,4 +111,3 @@ def index_row_dict_from_csv(path,
             table[ind] = dict(zip(columns, tp))
 
     return table
-    

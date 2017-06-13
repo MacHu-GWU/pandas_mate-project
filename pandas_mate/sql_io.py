@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+This module provide database I/O interface.
+"""
+
 import math
 import pandas as pd
 try:
-    from .transform import grouper_df
+    from .transform import grouper_df, to_dict_list_generic_type
 except:
-    from pandas_mate.transform import grouper_df
+    from pandas_mate.transform import grouper_df, to_dict_list_generic_type
 
 
 def smart_insert(df, table, engine, minimal_size=5):
@@ -18,12 +22,15 @@ def smart_insert(df, table, engine, minimal_size=5):
     好数据存入数据库的方法。
     """
     from sqlalchemy.exc import IntegrityError
-
-    insert = table.insert()
-
+    
+    try:
+        table_name = table.name
+    except:
+        table_name = table
+    
     # 首先进行尝试bulk insert
     try:
-        df.to_sql(table.name, engine, index=False, if_exists="append")
+        df.to_sql(table_name, engine, index=False, if_exists="append")
     # 失败了
     except IntegrityError:
         # 分析数据量
@@ -34,19 +41,20 @@ def smart_insert(df, table, engine, minimal_size=5):
             n_chunk = math.floor(math.sqrt(n))
             for sub_df in grouper_df(df, n_chunk):
                 smart_insert(
-                    sub_df, table, engine, minimal_size)
+                    sub_df, table_name, engine, minimal_size)
         # 否则则一条条地逐条插入
         else:
             for sub_df in grouper_df(df, 1):
                 try:
                     sub_df.to_sql(
-                        table.name, engine, index=False, if_exists="append")
+                        table_name, engine, index=False, if_exists="append")
                 except IntegrityError:
                     pass
 
 
 def excel_to_sql(excel_file_path, engine,
                  read_excel_kwargs=None,
+                 to_generic_type_kwargs=None,
                  to_sql_kwargs=None):
     """Create a database from excel.
 
@@ -68,16 +76,25 @@ def excel_to_sql(excel_file_path, engine,
     if to_sql_kwargs is None:
         to_sql_kwargs = dict()
 
+    if to_generic_type_kwargs is None:
+        to_generic_type_kwargs = dict()
+
     xl = pd.ExcelFile(excel_file_path)
     for sheet_name in xl.sheet_names:
         df = pd.read_excel(
             excel_file_path, sheet_name,
             **read_excel_kwargs.get(sheet_name, dict())
         )
-        df.to_sql(
-            sheet_name, engine, index=False,
-            **to_sql_kwargs.get(sheet_name, dict(if_exists="replace"))
-        )
+        
+        kwargs = to_generic_type_kwargs.get(sheet_name)
+        if kwargs:
+            data = to_dict_list_generic_type(df, **kwargs)
+            smart_insert(data, sheet_name, engine)
+        else:
+            df.to_sql(
+                sheet_name, engine, index=False,
+                **to_sql_kwargs.get(sheet_name, dict(if_exists="replace"))
+            )
 
 
 def database_to_excel(engine, excel_file_path):

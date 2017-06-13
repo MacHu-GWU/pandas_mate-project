@@ -85,28 +85,28 @@ def test_to_dict_list():
 
 
 def test_to_dict_list_generic_type():
+    import pickle
+    b = pickle.dumps([1, 2, 3])
+    
     data = [
-        ["Jack", 1, 0.1, None],
-        ["Tom", 2, None, datetime(2000, 1, 2)],
-        ["Bob", None, 0.3, datetime(2000, 1, 3)],
-        [None, 4, 0.4, datetime(2000, 1, 4)],
+        [1, 0.1, "Jack", b, True, None],
+        [1, 0.1, "Jack", b, None, datetime(2000, 1, 1)],
+        [1, 0.1, "Jack", None, True, datetime(2000, 1, 1)],
+        [1, 0.1, None, b, True, datetime(2000, 1, 1)],
+        [1, None, "Jack", b, True, datetime(2000, 1, 1)],
+        [None, 0.1, "Jack", b, True, datetime(2000, 1, 1)],
     ]
-    df = pd.DataFrame(data, columns=list("ABCD"))
-    data = transform.to_dict_list_generic_type(df, int_col="B")
-    doc1, doc2, doc3, doc4 = data
-
-    assert doc1["D"] is None
-    assert doc2["C"] is None
-    assert doc3["B"] is None
-    assert doc4["A"] is None
-
-    assert doc1["B"] == 1
-    assert doc2["B"] == 2
-    assert doc4["B"] == 4
-
-    assert doc2["D"].day == 2
-    assert doc3["D"].day == 3
-    assert doc4["D"].day == 4
+    columns = list("ABCDEF")
+    df = pd.DataFrame(data, columns=columns)
+    data1 = transform.to_dict_list_generic_type(df, int_col="A", binary_col="D")
+    for row, doc in zip(data, data1):
+        for v, col in zip(row, columns):
+            if isinstance(v, datetime):
+                assert v.year == doc[col].year
+                assert v.month == doc[col].month
+                assert v.day == doc[col].day
+            else:
+                assert v == doc[col]
 
 
 if __name__ == "__main__":
